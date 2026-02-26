@@ -6,10 +6,12 @@ check: test lint type
 
 .PHONY: install
 install:
-	@poetry install --extras torch scikit-learn
+	@poetry install --extras "torch" --extras "scikit-learn"
 
 .PHONY: test
-test: test-doctest test-pytest
+
+# Installation automatique des extras dev avant les tests
+test: install test-doctest test-pytest
 
 .PHONY: test-doctest
 test-doctest:
