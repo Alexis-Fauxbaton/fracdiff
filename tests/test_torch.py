@@ -30,11 +30,14 @@ class TestTorchFracdiff:
         input = torch.randint(5, size=(10, 100))
 
         result = fdiff(input, d, mode=mode)
-        expect = torch.from_numpy(fracdiff.fdiff(np.array(input), d, mode=mode))
+        # Correction: numpy 2.x ne supporte plus copy=False dans __array__
+        arr = input.numpy() if hasattr(input, 'numpy') else np.array(input)
+        expect = torch.from_numpy(fracdiff.fdiff(arr, d, mode=mode))
         assert_close(result, expect, check_stride=False, check_dtype=False)
 
         result = Fracdiff(d, mode=mode)(input)
-        expect = torch.from_numpy(fracdiff.fdiff(np.array(input), d, mode=mode))
+        arr = input.numpy() if hasattr(input, 'numpy') else np.array(input)
+        expect = torch.from_numpy(fracdiff.fdiff(arr, d, mode=mode))
         assert_close(result, expect, check_stride=False, check_dtype=False)
 
     @pytest.mark.parametrize("d", [0.1, 0.5, 1])
