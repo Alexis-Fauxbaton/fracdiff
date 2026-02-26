@@ -136,7 +136,8 @@ def fdiff(
     a = np.asanyarray(a)
     # Mypy complains:
     # fracdiff/fdiff.py:135: error: Module has no attribute "normalize_axis_index"
-    axis = np.core.multiarray.normalize_axis_index(axis, a.ndim)  # type: ignore
+    # Correction: numpy.core est deprecated, utiliser numpy._core.multiarray
+    axis = np._core.multiarray.normalize_axis_index(axis, a.ndim)  # type: ignore
     dtype = a.dtype if np.issubdtype(a.dtype, np.floating) else np.float64
 
     combined = []
